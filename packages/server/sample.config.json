@@ -1,0 +1,8 @@
+{
+  "services": [
+    {
+      "name": "my-service-name",
+      "enable2fa": true
+    }
+  ]
+}

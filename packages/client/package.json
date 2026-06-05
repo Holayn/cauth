@@ -1,0 +1,18 @@
+{
+  "name": "@cauth/client",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch:build": "tsc -w"
+  },
+  "peerDependencies": {
+    "express": "^4.x || ^5.x"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.5",
+    "typescript": "^5.9.3"
+  }
+}

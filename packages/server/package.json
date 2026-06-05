@@ -14,20 +14,25 @@
     "lint:fix": "eslint . --ext .ts --fix"
   },
   "dependencies": {
+    "cookie": "^0.7.2",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
     "hbs": "^4.2.0",
     "helmet": "^4.6.0",
+    "kaiauth": "https://github.com/Holayn/kaiauth/archive/refs/tags/2.2.0.tar.gz",
     "morgan": "^1.10.0",
     "node-cron": "^4.2.1",
     "winston": "^3.18.3",
     "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
+    "@types/cookie": "^0.6.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.5",
+    "@types/express-session": "^1.19.0",
     "@types/hbs": "^4.0.5",
+    "@types/kaiauth": "https://github.com/Holayn/kaiauth/archive/refs/tags/2.2.0.tar.gz",
     "@types/morgan": "^1.9.10",
     "@types/node-cron": "^3.0.11",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
