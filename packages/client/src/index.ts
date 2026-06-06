@@ -5,12 +5,17 @@ const asyncHandler =
   (req: Request, res: Response, next: NextFunction) =>
     Promise.resolve(fn(req, res, next)).catch(next);
 
-export function createClient({ 
-  cauthUrl, 
+export function createClient({
+  cauthUrl,
   cauthService,
   redirectUrl = '/',
   development = false,
-}: { cauthUrl?: string; cauthService?: string; redirectUrl?: string; development?: boolean; } = {}) {
+}: {
+  cauthUrl?: string;
+  cauthService?: string;
+  redirectUrl?: string;
+  development?: boolean;
+} = {}) {
   if (!cauthUrl) {
     throw new Error('cauthUrl is required');
   }
@@ -45,6 +50,10 @@ export function createClient({
 
     res.redirect(redirectUrl);
   }));
+
+  router.get('/login', (_req, res) => {
+    res.redirect(`${cauthUrl}?service=${cauthService}`);
+  });
 
   const requireAuth = asyncHandler(async (req, res, next) => {
     const response = await fetch(`${cauthUrl}/api/${cauthService}/auth/verify`, {

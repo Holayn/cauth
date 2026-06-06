@@ -27,6 +27,9 @@ export function createClient({ cauthUrl, cauthService, redirectUrl = '/', develo
         });
         res.redirect(redirectUrl);
     }));
+    router.get('/login', (_req, res) => {
+        res.redirect(`${cauthUrl}?service=${cauthService}`);
+    });
     const requireAuth = asyncHandler(async (req, res, next) => {
         const response = await fetch(`${cauthUrl}/api/${cauthService}/auth/verify`, {
             headers: {
