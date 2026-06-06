@@ -8,8 +8,9 @@ const asyncHandler =
 export function createClient({ 
   cauthUrl, 
   cauthService,
+  redirectUrl = '/',
   development = false,
-}: { cauthUrl?: string; cauthService?: string; development?: boolean } = {}) {
+}: { cauthUrl?: string; cauthService?: string; redirectUrl?: string; development?: boolean; } = {}) {
   if (!cauthUrl) {
     throw new Error('cauthUrl is required');
   }
@@ -42,7 +43,7 @@ export function createClient({
       secure: !development,
     });
 
-    res.sendStatus(200);
+    res.redirect(redirectUrl);
   }));
 
   const requireAuth = asyncHandler(async (req, res, next) => {

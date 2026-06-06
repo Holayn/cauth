@@ -35,6 +35,7 @@ app.get('/dashboard', requireAuth, (req, res) => {
 |---|---|---|---|
 | `cauthUrl` | `string` | yes | Base URL of the cauth server |
 | `cauthService` | `string` | yes | Service name as configured on the cauth server |
+| `redirectUrl` | `string` | no | Path to redirect to after successful login (default: `'/'`) |
 | `development` | `boolean` | no | Disables `secure` flag on session cookies (default: `false`) |
 
 Returns `{ router, requireAuth }`.

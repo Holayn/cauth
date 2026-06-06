@@ -1,6 +1,6 @@
 import { Router } from 'express';
 const asyncHandler = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
-export function createClient({ cauthUrl, cauthService, development = false, } = {}) {
+export function createClient({ cauthUrl, cauthService, redirectUrl = '/', development = false, } = {}) {
     if (!cauthUrl) {
         throw new Error('cauthUrl is required');
     }
@@ -25,7 +25,7 @@ export function createClient({ cauthUrl, cauthService, development = false, } = 
             sameSite: 'strict',
             secure: !development,
         });
-        res.sendStatus(200);
+        res.redirect(redirectUrl);
     }));
     const requireAuth = asyncHandler(async (req, res, next) => {
         const response = await fetch(`${cauthUrl}/${cauthService}/auth/verify`, {
