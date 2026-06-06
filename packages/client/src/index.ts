@@ -20,7 +20,7 @@ export function createClient({
 
   const router = Router();
 
-  router.get('/auth/callback', asyncHandler(async (req, res) => {
+  router.get('/api/auth/callback', asyncHandler(async (req, res) => {
     const { code } = req.query;
 
     if (!code || typeof code !== 'string') {
@@ -28,7 +28,7 @@ export function createClient({
       return;
     }
 
-    const exchangeUrl = `${cauthUrl}/${cauthService}/exchange?code=${encodeURIComponent(code)}`;
+    const exchangeUrl = `${cauthUrl}/api/${cauthService}/exchange?code=${encodeURIComponent(code)}`;
     const response = await fetch(exchangeUrl, { method: 'POST' });
 
     if (!response.ok) {
@@ -47,7 +47,7 @@ export function createClient({
   }));
 
   const requireAuth = asyncHandler(async (req, res, next) => {
-    const response = await fetch(`${cauthUrl}/${cauthService}/auth/verify`, {
+    const response = await fetch(`${cauthUrl}/api/${cauthService}/auth/verify`, {
       headers: {
         Authorization: `Bearer ${req.cookies.session ?? ''}`,
       },

@@ -5,13 +5,13 @@ Express middleware for integrating with a [cauth server](../server).
 ## Installation
 
 ```bash
-npm install cauth-client
+npm install @cauth/client
 ```
 
 ## Usage
 
 ```ts
-import { createClient } from 'cauth-client';
+import { createClient } from '@cauth/client';
 
 const { router, requireAuth } = createClient({
   cauthUrl: 'https://your-cauth-server.example.com',
