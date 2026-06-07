@@ -37,6 +37,7 @@ export function createClient({
     const response = await fetch(exchangeUrl, { method: 'POST' });
 
     if (!response.ok) {
+      console.error(`Failed to exchange code with ${exchangeUrl} (status: ${response.status})`);
       return res.status(502).json({ error: 'Failed to exchange code' });
     }
 
