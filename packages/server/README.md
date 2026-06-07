@@ -26,11 +26,11 @@ Centralized authentication server supporting multiple services/tenants. Built wi
    | `NODE_ENV` | Set to `development` to enable dev mode (relaxes some requirements) |
    | `PORT` | Port to listen on |
    | `SESSION_SECRET` | Secret used to sign sessions (required) |
-   | `DATA_DIR` | Directory where auth data is stored (required) |
+   | `DATA_DIR` | Directory where auth data and the `config.json` is stored (required) |
    | `NOTIFY_SERVICE_URL` | URL for a notification service (2FA codes, alerts); required outside development |
    | `WEB_DEV_PORT` | Port of local web development server (required in development) |
 
-3. Create a `config.json` from `sample.config.json`:
+3. Create a `config.json` from `sample.config.json` inside `DATA_DIR`:
    ```bash
    cp sample.config.json config.json
    ```
