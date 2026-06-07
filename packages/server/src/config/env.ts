@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === 'development' && !process.env.WEB_DEV_PORT) {
 }
 
 export const PORT = process.env.PORT || 3000;
-export const NODE_ENV = process.env.NODE_ENV || 'development';
+export const NODE_ENV = process.env.NODE_ENV;
 export const SESSION_SECRET = process.env.SESSION_SECRET;
 export const DATA_DIR = process.env.DATA_DIR;
 export const NOTIFY_SERVICE_URL = process.env.NOTIFY_SERVICE_URL;
