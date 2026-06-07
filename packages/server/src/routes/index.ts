@@ -100,7 +100,7 @@ if (isDevelopment) {
     res.redirect(`http://localhost:${WEB_DEV_PORT}${query}`);
   });
 } else {
-  router.use('/', express.static(path.join(getDirname(import.meta.url), '../../../web/dist')));
+  router.use('/', express.static(path.join(getDirname(import.meta.url), '../../../../web/dist')));
 }
 router.get('/api/service', (req, res) => {
   console.log('Query:', req.query);
