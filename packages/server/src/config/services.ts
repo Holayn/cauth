@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
-import { getDirname } from '../util/path.js';
+import { DATA_DIR } from './env.js';
 
-const CONFIG_PATH = path.join(getDirname(import.meta.url), '../../config.json');
+const CONFIG_PATH = path.join(DATA_DIR, 'config.json');
 
 export function getServices() {
   const config = fs.readFileSync(CONFIG_PATH);

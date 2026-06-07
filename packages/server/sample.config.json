@@ -2,7 +2,9 @@
   "services": [
     {
       "name": "my-service-name",
-      "enable2fa": true
+      "displayName": "My Service",
+      "enable2fa": true,
+      "url": "https://my-service-name.com"
     }
   ]
 }

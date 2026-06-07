@@ -23,10 +23,12 @@ Centralized authentication server supporting multiple services/tenants. Built wi
 
    | Variable | Description |
    |---|---|
+   | `NODE_ENV` | Set to `development` to enable dev mode (relaxes some requirements) |
    | `PORT` | Port to listen on |
    | `SESSION_SECRET` | Secret used to sign sessions (required) |
    | `DATA_DIR` | Directory where auth data is stored (required) |
-   | `NOTIFY_SERVICE_URL` | Optional URL for a notification service (2FA codes, alerts) |
+   | `NOTIFY_SERVICE_URL` | URL for a notification service (2FA codes, alerts); required outside development |
+   | `WEB_DEV_PORT` | Port of local web development server (required in development) |
 
 3. Create a `config.json` from `sample.config.json`:
    ```bash
@@ -38,7 +40,9 @@ Centralized authentication server supporting multiple services/tenants. Built wi
      "services": [
        {
          "name": "my-service",
-         "enable2fa": true
+         "displayName": "My Service",
+         "enable2fa": true,
+         "url": "https://my-service.com"
        }
      ]
    }
@@ -53,21 +57,26 @@ Centralized authentication server supporting multiple services/tenants. Built wi
 
 ## API
 
-Each configured service exposes the following endpoints under `/<service-name>`:
+Each configured service exposes the following endpoints under `/api/<service-name>`:
 
 | Method | Path | Description |
 |---|---|---|
-| `POST` | `/<service>/auth` | Log in |
-| `POST` | `/<service>/auth/2fa` | Complete 2FA |
-| `POST` | `/<service>/auth/logout` | Log out |
-| `GET` | `/<service>/auth/verify` | Verify session — returns `{ username }` |
-| `POST` | `/<service>/exchange` | Exchange a one-time code for a session ID |
+| `POST` | `/api/<service>/auth` | Log in — returns `{ code }` on success |
+| `POST` | `/api/<service>/auth/2fa` | Complete 2FA — returns `{ code }` on success |
+| `POST` | `/api/<service>/auth/logout` | Log out |
+| `GET` | `/api/<service>/auth/verify` | Verify session — returns `{ username }` |
+| `GET` | `/api/<service>/exchange?code=<code>` | Exchange a one-time code for a session ID |
 
 Additional endpoints:
 
 | Method | Path | Description |
 |---|---|---|
-| `GET` | `/service?name=<service>` | Get service configuration |
+| `GET` | `/api/service?name=<service>` | Get service configuration |
+| `GET` | `/health` | Health check |
+
+### Authentication
+
+Endpoints accept either a session cookie or a `Authorization: Bearer <sessionId>` header. The bearer token is transparently converted to a cookie internally.
 
 ## Scripts
 
