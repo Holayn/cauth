@@ -27,6 +27,7 @@ Centralized authentication server supporting multiple services/tenants. Built wi
    | `PORT` | Port to listen on |
    | `SESSION_SECRET` | Secret used to sign sessions (required) |
    | `DATA_DIR` | Directory where auth data and the `config.json` is stored (required) |
+   | `API_TOKEN` | Shared secret used to authenticate requests from cauth clients (required) |
    | `NOTIFY_SERVICE_URL` | URL for a notification service (2FA codes, alerts); required outside development |
    | `WEB_DEV_PORT` | Port of local web development server (required in development) |
 
