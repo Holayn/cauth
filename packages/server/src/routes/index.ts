@@ -6,7 +6,7 @@ import { randomUUID } from 'crypto';
 import { parse as parseCookie, serialize as serializeCookie } from 'cookie';
 import { sign as signCookie } from 'cookie-signature';
 import { createAuthRouter } from 'kaiauth';
-import { SESSION_SECRET, DATA_DIR, WEB_DEV_PORT, isDevelopment } from '../config/env.js';
+import { SESSION_SECRET, DATA_DIR, WEB_DEV_PORT, isDevelopment, API_TOKEN } from '../config/env.js';
 import { getServices } from '../config/services.js';
 import { notify } from '../services/notify.js';
 import { getDirname } from '../util/path.js';
@@ -68,6 +68,10 @@ services.forEach(({ name, enable2fa = true }) => {
   });
 
   router.use(`/api/${name}/auth/verify`, (req, res, next) => {
+    if (!req.headers['x-api-token'] || req.headers['x-api-token'] !== API_TOKEN) {
+      return res.status(401).json({ message: 'Missing API token' });
+    }
+
     const origSendStatus = res.sendStatus.bind(res);
     res.sendStatus = (status: number) => {
       if (status === 200) {
@@ -79,6 +83,10 @@ services.forEach(({ name, enable2fa = true }) => {
   });
 
   router.use(`/api/${name}/exchange`, (req, res) => {
+    if (!req.headers['x-api-token'] || req.headers['x-api-token'] !== API_TOKEN) {
+      return res.status(401).json({ message: 'Missing API token' });
+    }
+
     const { code } = req.query;
     if (!code || typeof code !== 'string') {
       return res.status(400).json({ error: 'Code is required' });

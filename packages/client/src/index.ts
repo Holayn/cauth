@@ -9,18 +9,23 @@ export function createClient({
   cauthUrl,
   cauthService,
   redirectUrl = '/',
+  apiToken,
   development = false,
 }: {
   cauthUrl?: string;
   cauthService?: string;
   redirectUrl?: string;
+  apiToken: string;
   development?: boolean;
-} = {}) {
+}) {
   if (!cauthUrl) {
     throw new Error('cauthUrl is required');
   }
   if (!cauthService) {
     throw new Error('cauthService is required');
+  }
+  if (!apiToken) {
+    throw new Error('API token is required');
   }
 
   const router = Router();
@@ -34,7 +39,13 @@ export function createClient({
     }
 
     const exchangeUrl = `${cauthUrl}/api/${cauthService}/exchange?code=${encodeURIComponent(code)}`;
-    const response = await fetch(exchangeUrl, { method: 'POST' });
+    const response = await fetch(exchangeUrl, { 
+      method: 'POST',
+      headers: {
+        'User-Agent': 'cauth-client/1.0',
+        'x-api-token': apiToken,
+      },
+    });
 
     if (!response.ok) {
       console.error(`Failed to exchange code with ${exchangeUrl} (status: ${response.status})`);
@@ -60,6 +71,8 @@ export function createClient({
     const response = await fetch(`${cauthUrl}/api/${cauthService}/auth/verify`, {
       headers: {
         Authorization: `Bearer ${req.cookies.session ?? ''}`,
+        'User-Agent': 'cauth-client/1.0',
+        'x-api-token': apiToken,
       },
     });
     if (response.status !== 200) return res.sendStatus(401);
