@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-export declare function createClient({ cauthUrl, cauthService, redirectUrl, apiToken, development, }: {
+export declare function createClient({ cauthUrl, cauthInternalUrl, cauthService, redirectUrl, apiToken, development, }: {
     cauthUrl?: string;
+    cauthInternalUrl?: string;
     cauthService?: string;
     redirectUrl?: string;
     apiToken: string;

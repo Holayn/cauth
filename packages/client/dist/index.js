@@ -1,6 +1,6 @@
 import { Router } from 'express';
 const asyncHandler = (fn) => (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
-export function createClient({ cauthUrl, cauthService, redirectUrl = '/', apiToken, development = false, }) {
+export function createClient({ cauthUrl, cauthInternalUrl, cauthService, redirectUrl = '/', apiToken, development = false, }) {
     if (!cauthUrl) {
         throw new Error('cauthUrl is required');
     }
@@ -10,6 +10,7 @@ export function createClient({ cauthUrl, cauthService, redirectUrl = '/', apiTok
     if (!apiToken) {
         throw new Error('API token is required');
     }
+    const internalUrl = cauthInternalUrl ?? cauthUrl;
     const router = Router();
     router.get('/api/auth/callback', asyncHandler(async (req, res) => {
         const { code } = req.query;
@@ -17,7 +18,7 @@ export function createClient({ cauthUrl, cauthService, redirectUrl = '/', apiTok
             res.status(400).json({ error: 'Missing code query parameter' });
             return;
         }
-        const exchangeUrl = `${cauthUrl}/api/${cauthService}/exchange?code=${encodeURIComponent(code)}`;
+        const exchangeUrl = `${internalUrl}/api/${cauthService}/exchange?code=${encodeURIComponent(code)}`;
         const response = await fetch(exchangeUrl, {
             method: 'POST',
             headers: {
@@ -41,7 +42,7 @@ export function createClient({ cauthUrl, cauthService, redirectUrl = '/', apiTok
         res.redirect(`${cauthUrl}?service=${cauthService}`);
     });
     const requireAuth = asyncHandler(async (req, res, next) => {
-        const response = await fetch(`${cauthUrl}/api/${cauthService}/auth/verify`, {
+        const response = await fetch(`${internalUrl}/api/${cauthService}/auth/verify`, {
             headers: {
                 Authorization: `Bearer ${req.cookies.session ?? ''}`,
                 'User-Agent': 'cauth-client/1.0',

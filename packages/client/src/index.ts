@@ -7,12 +7,14 @@ const asyncHandler =
 
 export function createClient({
   cauthUrl,
+  cauthInternalUrl,
   cauthService,
   redirectUrl = '/',
   apiToken,
   development = false,
 }: {
   cauthUrl?: string;
+  cauthInternalUrl?: string;
   cauthService?: string;
   redirectUrl?: string;
   apiToken: string;
@@ -28,6 +30,8 @@ export function createClient({
     throw new Error('API token is required');
   }
 
+  const internalUrl = cauthInternalUrl ?? cauthUrl;
+
   const router = Router();
 
   router.get('/api/auth/callback', asyncHandler(async (req, res) => {
@@ -38,8 +42,8 @@ export function createClient({
       return;
     }
 
-    const exchangeUrl = `${cauthUrl}/api/${cauthService}/exchange?code=${encodeURIComponent(code)}`;
-    const response = await fetch(exchangeUrl, { 
+    const exchangeUrl = `${internalUrl}/api/${cauthService}/exchange?code=${encodeURIComponent(code)}`;
+    const response = await fetch(exchangeUrl, {
       method: 'POST',
       headers: {
         'User-Agent': 'cauth-client/1.0',
@@ -68,7 +72,7 @@ export function createClient({
   });
 
   const requireAuth = asyncHandler(async (req, res, next) => {
-    const response = await fetch(`${cauthUrl}/api/${cauthService}/auth/verify`, {
+    const response = await fetch(`${internalUrl}/api/${cauthService}/auth/verify`, {
       headers: {
         Authorization: `Bearer ${req.cookies.session ?? ''}`,
         'User-Agent': 'cauth-client/1.0',

@@ -34,7 +34,8 @@ app.get('/dashboard', requireAuth, (req, res) => {
 
 | Option | Type | Required | Description |
 |---|---|---|---|
-| `cauthUrl` | `string` | yes | Base URL of the cauth server |
+| `cauthUrl` | `string` | yes | Public base URL of the cauth server (used for browser redirects) |
+| `cauthInternalUrl` | `string` | no | Internal base URL of the cauth server for server-to-server calls (default: `cauthUrl`) |
 | `cauthService` | `string` | yes | Service name as configured on the cauth server |
 | `apiToken` | `string` | yes | Shared secret matching `API_TOKEN` on the cauth server |
 | `redirectUrl` | `string` | no | Path to redirect to after successful login (default: `'/'`) |
