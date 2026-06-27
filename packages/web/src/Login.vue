@@ -104,6 +104,7 @@ export default {
           this.error = true;
           this.errorMessage = 'Failed to load service info';
         }
+        return;
       }
       this.service = await res.json();
       if (this.service) {
