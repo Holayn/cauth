@@ -56,12 +56,13 @@ export function createClient({
       return res.status(502).json({ error: 'Failed to exchange code' });
     }
 
-    const { sessionId } = await response.json() as { sessionId: string };
+    const { sessionId, cookieExpires } = await response.json() as { sessionId: string; cookieExpires: string | null };
 
     res.cookie('session', sessionId, {
       httpOnly: true,
       sameSite: 'strict',
       secure: !development,
+      ...(cookieExpires != null ? { expires: new Date(cookieExpires) } : {}),
     });
 
     res.redirect(redirectUrl);

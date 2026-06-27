@@ -30,11 +30,12 @@ export function createClient({ cauthUrl, cauthInternalUrl, cauthService, redirec
             console.error(`Failed to exchange code with ${exchangeUrl} (status: ${response.status})`);
             return res.status(502).json({ error: 'Failed to exchange code' });
         }
-        const { sessionId } = await response.json();
+        const { sessionId, cookieExpires } = await response.json();
         res.cookie('session', sessionId, {
             httpOnly: true,
             sameSite: 'strict',
             secure: !development,
+            ...(cookieExpires != null ? { expires: new Date(cookieExpires) } : {}),
         });
         res.redirect(redirectUrl);
     }));

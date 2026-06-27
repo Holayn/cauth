@@ -29,7 +29,7 @@ router.use((req, res, next) => {
 services.forEach(({ name, enable2fa = true }) => {
   fs.mkdirSync(path.join(DATA_DIR, name), { recursive: true });
 
-  const exchangeCodes = new Map<string, string>();
+  const exchangeCodes = new Map<string, { sessionId: string; cookieExpires: Date | null }>();
 
   const { router: authRouter } = createAuthRouter({
     authDataDir: path.join(DATA_DIR, name),
@@ -53,8 +53,10 @@ services.forEach(({ name, enable2fa = true }) => {
       res.sendStatus = (status: number) => {
         if (status === 200) {
           const code = randomUUID();
-          const sessionId = req.sessionID;
-          exchangeCodes.set(code, sessionId);
+          exchangeCodes.set(code, {
+            sessionId: req.sessionID,
+            cookieExpires: req.session.cookie.expires ?? null,
+          });
           setTimeout(() => {
             exchangeCodes.delete(code);
           }, 30 * 1000).unref();
@@ -91,12 +93,12 @@ services.forEach(({ name, enable2fa = true }) => {
     if (!code || typeof code !== 'string') {
       return res.status(400).json({ error: 'Code is required' });
     }
-    const sessionId = exchangeCodes.get(code);
-    if (!sessionId) {
+    const entry = exchangeCodes.get(code);
+    if (!entry) {
       return res.status(400).json({ error: 'Invalid code' });
     }
     exchangeCodes.delete(code as string);
-    return res.json({ sessionId });
+    return res.json({ sessionId: entry.sessionId, cookieExpires: entry.cookieExpires });
   });
 
   router.use(`/api/${name}`, authRouter);
