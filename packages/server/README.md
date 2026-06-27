@@ -79,6 +79,30 @@ Additional endpoints:
 
 Endpoints accept either a session cookie or a `Authorization: Bearer <sessionId>` header. The bearer token is transparently converted to a cookie internally.
 
+## Managing Users
+
+Users are stored per-service in `<DATA_DIR>/<service-name>/auth.db`. Use the `kaiauth` CLI to add or list users without writing any code.
+
+**Add a user:**
+
+```bash
+npx kaiauth add-user <username> <password> --db <DATA_DIR>/<service-name>/auth.db
+```
+
+**List users:**
+
+```bash
+npx kaiauth list-users --db <DATA_DIR>/<service-name>/auth.db
+```
+
+**Example** — adding a user `alice` to the `my-service` service, where `DATA_DIR` is `./data`:
+
+```bash
+npx kaiauth add-user alice hunter2 --db ./data/my-service/auth.db
+```
+
+See [kaiauth docs](https://npmjs.com/package/kaiauth) for more info.
+
 ## Scripts
 
 | Script | Description |
